@@ -1,22 +1,22 @@
 # Movix CLI
 
-**Un lecteur de films en ligne de commande, écrit en Python et basé sur l’API Movix.**
+**Un lecteur de films en ligne de commande pour Linux, écrit en Python et basé sur l’API Movix.**
 
-Movix CLI permet de rechercher des films, de sélectionner une source vidéo et d’ouvrir le lecteur dans une fenêtre dédiée. Le projet est développé sous Linux et utilise une interface interactive dans le terminal.
+Movix CLI permet de rechercher des films, de choisir un lecteur vidéo disponible et de l’ouvrir dans une fenêtre dédiée. L’interface de sélection fonctionne directement dans le terminal.
 
 > [!WARNING]
 > **Version 0.1 Beta**
 >
-> Le projet est encore en développement et a été réalisé avec beaucoup d’aide de l’intelligence artificielle, en expérimentant au fur et à mesure. Le code et les fonctionnalités pourront évoluer : des bugs sont possibles.
+> Le projet a été réalisé avec beaucoup d’expérimentation et l’aide de l’intelligence artificielle (*vibe coding*). Il est encore en développement : des bugs sont possibles et le code peut évoluer.
 >
-> **Les séries ne fonctionnent pas encore.** Pour le moment, seule la lecture des films est prise en charge.
+> **Les séries ne fonctionnent pas encore.** Pour le moment, la prise en charge concerne uniquement les films.
 
 ## Fonctionnalités
 
-- Recherche de films via l’API Movix.
+- Recherche de titres via l’API Movix.
 - Interface interactive dans le terminal.
 - Sélection parmi les lecteurs vidéo disponibles.
-- Lecture dans une fenêtre dédiée grâce à Qt WebEngine.
+- Ouverture du lecteur dans une fenêtre dédiée avec Qt WebEngine.
 - Navigation au clavier.
 
 ## Prérequis
@@ -30,29 +30,38 @@ Movix CLI permet de rechercher des films, de sélectionner une source vidéo et 
 
 ### 1. Télécharger le projet
 
-Remplace `VOTRE_PSEUDO` par ton nom d’utilisateur GitHub.
-
 ```bash
-git clone https://github.com/VOTRE_PSEUDO/movix-cli.git
-cd movix-cli
+git clone https://github.com/ouweys4060/movix-CLI.git
+cd movix-CLI
 ```
 
-### 2. Installer les dépendances
+### 2. Créer un environnement Python
 
 Créer un environnement virtuel :
 
 ```bash
 python -m venv .venv
+```
+
+L’activer avec Bash ou Zsh :
+
+```bash
 source .venv/bin/activate
 ```
 
-Installer PySide6 et ses composants :
+Ou avec Fish :
 
-```bash
-pip install PySide6 PySide6-Addons PySide6-Essentials shiboken6
+```fish
+source .venv/bin/activate.fish
 ```
 
-### 3. Lancer Movix CLI
+Installer la dépendance de l’interface et du lecteur :
+
+```bash
+python -m pip install PySide6
+```
+
+### 3. Lancer l’application
 
 Depuis le dossier du projet :
 
@@ -62,35 +71,33 @@ python movix.py
 
 ## Créer la commande `movix`
 
-Pour lancer l’application depuis n’importe quel dossier avec simplement `movix`, tu peux créer un lanceur dans `~/.local/bin`.
-
-Depuis le dossier `movix-cli`, exécute :
+Tu peux créer un lanceur local pour démarrer l’application depuis n’importe quel dossier. Après l’installation des dépendances, exécute ces commandes **depuis le dossier du projet** :
 
 ```bash
 mkdir -p ~/.local/bin
-printf '#!/bin/sh\ncd "$HOME/Projets/movix-cli" && exec "$HOME/Projets/movix-cli/.venv/bin/python" "$HOME/Projets/movix-cli/movix.py" "$@"\n' > ~/.local/bin/movix
+printf '#!/bin/sh\nexec "%s/.venv/bin/python" "%s/movix.py" "$@"\n' "$PWD" "$PWD" > ~/.local/bin/movix
 chmod +x ~/.local/bin/movix
 ```
 
-Cette commande suppose que le projet se trouve dans `~/Projets/movix-cli`. Si tu l’as installé ailleurs, adapte le chemin dans le lanceur.
-
-Si `~/.local/bin` n’est pas déjà dans ton `PATH`, ajoute-le à ton fichier de configuration Fish :
+Le lanceur mémorise le chemin du dossier dans lequel tu l’as créé. Si `~/.local/bin` n’est pas dans ton `PATH`, ajoute-le à Fish :
 
 ```fish
 fish_add_path ~/.local/bin
 ```
 
-Tu peux maintenant lancer l’application avec :
+Tu peux ensuite lancer l’application avec :
 
 ```bash
 movix
 ```
 
+Si tu déplaces le dossier du projet, recrée le lanceur depuis son nouvel emplacement.
+
 ## Utilisation
 
 1. Saisir le titre à rechercher.
-2. Choisir un résultat dans le menu.
-3. Sélectionner un lecteur vidéo.
+2. Sélectionner un résultat dans le menu.
+3. Choisir un lecteur vidéo disponible.
 4. Le lecteur s’ouvre dans une fenêtre séparée.
 5. Fermer cette fenêtre pour revenir au terminal.
 
@@ -98,48 +105,41 @@ movix
 
 | Touche | Action |
 |---|---|
-| `↑` / `↓` | Naviguer |
-| `Entrée` / `→` | Confirmer |
+| `↑` / `↓` | Naviguer dans le menu |
+| `Entrée` / `→` | Confirmer la sélection |
 | `←` / `Échap` | Revenir en arrière ou annuler |
 | `Q` | Quitter |
 
 ## Limitations actuelles
 
-- **Les séries ne fonctionnent pas encore.** La sélection des saisons et des épisodes reste à développer.
-- Le projet n’a pas encore été testé de manière approfondie sur différentes distributions Linux.
+- **Les séries ne fonctionnent pas encore.** La sélection des saisons et des épisodes reste à implémenter.
 - Certains lecteurs tiers peuvent ne pas fonctionner ou afficher des publicités.
-- La gestion des erreurs et l’installation pourront être améliorées.
+- La gestion des erreurs et la compatibilité doivent encore être améliorées.
+- Le projet n’a pas encore été testé de manière approfondie sur différentes distributions Linux.
 
-## Développement et contributions
+## Contributions
 
-Movix CLI est actuellement en **version 0.1 Beta**. C’est un projet expérimental qui évoluera en fonction des tests, des retours et des contributions.
+Movix CLI est un projet expérimental en version **0.1 Beta**. **Toute aide est la bienvenue !**
 
-**Toute aide est la bienvenue !**
-
-Tu peux contribuer en :
-
-- Ajoutant la prise en charge des séries.
-- Corrigeant des bugs.
-- Améliorant l’interface et l’expérience utilisateur.
-- Simplifiant l’installation.
-- Améliorant le code et la documentation.
-- Testant l’application sur d’autres distributions Linux.
+Tu peux contribuer en ajoutant la prise en charge des séries, en corrigeant des bugs, en améliorant l’interface ou l’installation, en révisant le code et la documentation, ou en testant l’application sur d’autres distributions Linux.
 
 Les suggestions, issues et pull requests sont les bienvenues, quel que soit ton niveau en programmation.
 
 ## Crédits
 
-Un grand merci à l’équipe de **Movix** pour le projet original, son API et le travail de mise à disposition du code source.
+Merci aux créateurs et contributeurs de **Movix** pour le projet original, son API et le travail partagé avec la communauté.
 
-- Projet original : [Movix Open Source sur GitHub](https://github.com/movixcorp/MovixOpenSource)
-- Site et services Movix : [movix.online](https://movix.online)
+- Projet original : [Movix Open Source sur GitHub](https://github.com/movixstream/MovixOpenSource)
+- Site de Movix : [movix.dog](https://movix.dog)
 
-Movix CLI est un projet indépendant, développé à partir de l’API Movix. Il n’est pas le projet officiel de l’équipe Movix et n’est pas nécessairement affilié à celle-ci.
+Movix CLI est un projet indépendant et non officiel. Il n’est pas présenté comme étant le projet officiel de l’équipe Movix.
 
 ## Avertissement
 
-Movix CLI n’héberge aucune vidéo. L’application récupère des informations et des liens vers des lecteurs tiers via l’API Movix. L’utilisation de ces services doit respecter les lois applicables et leurs conditions d’utilisation.
+Movix CLI n’héberge aucune vidéo. L’application récupère des informations et des liens vers des lecteurs tiers via l’API Movix. Les utilisateurs sont responsables du respect des lois applicables et des conditions d’utilisation des services auxquels ils accèdent.
 
 ## Licence
 
-La licence de Movix CLI reste à définir. Le projet original Movix possède sa propre licence : consulte son [dépôt GitHub](https://github.com/movixcorp/MovixOpenSource) pour connaître les conditions applicables à son code. Cette licence ne s’applique pas automatiquement à Movix CLI.
+Movix CLI est distribué sous la **licence MIT**. Tu peux utiliser, modifier et redistribuer le code couvert par cette licence, y compris dans des projets commerciaux, à condition de conserver les mentions de copyright et le texte de la licence dans les copies ou portions substantielles du code.
+
+Cette licence concerne le code de Movix CLI dont les droits peuvent être accordés par son auteur. Le code provenant du projet original Movix reste soumis à sa propre licence. Consulte le fichier [`LICENSE`](LICENSE) et la licence du projet original pour plus de détails.
