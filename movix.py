@@ -49,7 +49,7 @@ def main():
                 print("Sélection annulée.\n")
                 continue
 
-            media_type = "tv" if est_serie(choix) else "movie"
+            # Le type de catégorie Movix peut être trompeur (ex. "animes"\n            # pour un film). Préférer le type de lecture normalisé par l’API.\n            media_type = choix.get("_playback_type")\n            if media_type not in ("movie", "tv"):\n                media_type = "tv" if choix.get("is_series") is True or est_serie(choix) else "movie"
             nom = choix["name"]
             tmdb_id = choix["tmdb_id"]
 
