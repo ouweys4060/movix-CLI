@@ -115,6 +115,7 @@ def choisir_lecteur(lecteurs):
         lecteurs,
         "CHOISIR UN LECTEUR VIDÉO",
         lambda lecteur: (
+            f"{lecteur.get('host', 'lecteur inconnu')} · "
             f"{lecteur.get('quality', 'Lecteur vidéo')} "
             f"· {lecteur.get('language', 'Langue inconnue')}"
         ),
