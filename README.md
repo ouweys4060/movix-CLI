@@ -130,7 +130,7 @@ Les suggestions, issues et pull requests sont les bienvenues, quel que soit ton 
 Merci aux créateurs et contributeurs de **Movix** pour le projet original, son API et le travail partagé avec la communauté.
 
 - Projet original : [Movix Open Source sur GitHub](https://github.com/movixstream/MovixOpenSource)
-- Site de Movix : [movix.dog](https://movix.dog)
+- Site de Movix : [movix.online](https://movix.online)
 
 Movix CLI est un projet indépendant et non officiel. Il n’est pas présenté comme étant le projet officiel de l’équipe Movix.
 
