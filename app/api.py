@@ -1,4 +1,3 @@
-
 import json
 import urllib.error
 import urllib.parse
@@ -44,7 +43,7 @@ def _get_json(url):
 
 
 def search_title(title):
-    """Recherche des films et séries dans le catalogue Movix."""
+    """Recherche tous les titres ayant un identifiant TMDB valide."""
     query = urllib.parse.urlencode({"title": title})
     data = _get_json(f"{API_URL}/search?{query}")
     results = data.get("results", [])
@@ -61,7 +60,7 @@ def search_title(title):
 
         name = item.get("name")
         tmdb_id = str(item.get("tmdb_id", "")).strip()
-        media_type = str(item.get("type", "movie")).lower().strip()
+        media_type = str(item.get("type", "")).lower().strip()
 
         if not isinstance(name, str) or not name.strip():
             continue
@@ -69,16 +68,26 @@ def search_title(title):
         if not tmdb_id.isdigit() or int(tmdb_id) <= 0:
             continue
 
-        if media_type not in ("movie", "tv", "series", "show"):
-            continue
+        # L'API Movix peut renvoyer des films sous des types inattendus,
+        # par exemple "animes". Ne pas filtrer sur le champ "type".
+        # is_series, lorsqu'il est fourni par l'API, permet de distinguer
+        # une série d'un film sans dépendre de la catégorie du catalogue.
+        is_series = item.get("is_series")
+        if isinstance(is_series, bool):
+            playback_type = "tv" if is_series else "movie"
+        elif media_type in ("tv", "series", "show"):
+            playback_type = "tv"
+        else:
+            playback_type = "movie"
 
-        key = (media_type, tmdb_id)
+        key = (playback_type, tmdb_id)
         if key in seen:
             continue
 
         seen.add(key)
         result = dict(item)
         result["tmdb_id"] = tmdb_id
+        result["_playback_type"] = playback_type
         valid_results.append(result)
 
     return valid_results
