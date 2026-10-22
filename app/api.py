@@ -17,6 +17,7 @@ def _get_json(url):
         headers={
             "User-Agent": "MovixCLI/1.0",
             "Accept": "application/json",
+            "Referer": "https://movix.dog/",
         },
     )
 
@@ -130,8 +131,25 @@ def get_players(media_type, tmdb_id):
 
         valid_players.append({
             "url": url,
+            "host": parsed.hostname.removeprefix("www."),
             "quality": str(player.get("quality") or "Lecteur vidéo"),
             "language": str(player.get("language") or "Langue inconnue"),
         })
+
+    # Certaines réponses fournissent aussi un lecteur principal séparé.
+    main_url = data.get("iframe_src")
+    if isinstance(main_url, str):
+        parsed = urllib.parse.urlparse(main_url)
+        if (
+            parsed.scheme in ("http", "https")
+            and parsed.hostname
+            and not any(player["url"] == main_url for player in valid_players)
+        ):
+            valid_players.insert(0, {
+                "url": main_url,
+                "host": parsed.hostname.removeprefix("www."),
+                "quality": "Lecteur principal",
+                "language": "Langue inconnue",
+            })
 
     return valid_players
